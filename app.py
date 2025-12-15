@@ -31,9 +31,8 @@ HTML = """
 {% for f in followups %}
   <li style="color: {% if f.done %}gray{% else %}black{% endif %};
            text-decoration: {% if f.done %}line-through{% else %}none{% endif %};">
-    {{ f.text }}
-{% if f.due %}
-    <small>(due {{ f.due }})</small>
+    {{ f.text }}{% if f.get('due') %}
+    <small>(due {{ f.get('due') }})</small>
 {% endif %}
     {% if not f.done %}
         <a href="/done/{{ loop.index0 }}"> ✅</a>
