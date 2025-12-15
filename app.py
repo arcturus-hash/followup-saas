@@ -22,8 +22,9 @@ HTML = """
 <h1>Follow-up Tracker</h1>
 
 <form method="post" action="/add">
-  <input name="text" placeholder="Call instagram lead tommorrow">
-  <button>Add</button>
+  <input id="text" name="text" placeholder="e.g. Call client" required>
+<input type="date" name="due">
+<button>Add</button>
 </form>
 
 <ul>
@@ -31,6 +32,9 @@ HTML = """
   <li style="color: {% if f.done %}gray{% else %}black{% endif %};
            text-decoration: {% if f.done %}line-through{% else %}none{% endif %};">
     {{ f.text }}
+{% if f.due %}
+    <small>(due {{ f.due }})</small>
+{% endif %}
     {% if not f.done %}
         <a href="/done/{{ loop.index0 }}"> ✅</a>
     {% else %}
@@ -60,12 +64,12 @@ HTML = """
 def index():
     followups = load_followups()
     return render_template_string(HTML, followups=followups)
-
-@app.route("/add", methods=["POST"])
+@app.route("/add")
 def add():
     followups = load_followups()
     followups.append({
-        "text": request.form["text"],
+        "text": request.args.get("text"),
+        "due": request.args.get("due"),
         "done": False
     })
     save_followups(followups)
