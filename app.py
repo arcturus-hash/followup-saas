@@ -65,6 +65,9 @@ def index():
     return render_template_string(HTML, followups=followups)
 @app.route("/add")
 def add():
+    print("TEXT:", request.args.get("text"))
+    print("DUE:", request.args.get("due"))
+
     followups = load_followups()
     followups.append({
         "text": request.args.get("text"),
