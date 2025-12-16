@@ -41,7 +41,7 @@ HTML = """
     {% endif %}
 <li style="color: {% if f.done %}gray{% else %}black{% endif %};
            text-decoration: {% if f.done %}line-through{% else %}none{% endif %};">
-    {{ f.text }}
+    {{ f.text }} — {{ f.due }}
 
     {% if not f.done %}
         <a href="/done/{{ loop.index0 }}"> ✅</a>
@@ -63,10 +63,10 @@ HTML = """
 def index():
     followups = load_followups()
     return render_template_string(HTML, followups=followups)
-@app.route("/add")
-def add():
-    print("TEXT:", request.args.get("text"))
-    print("DUE:", request.args.get("due"))
+@app.route("/followups", methods=["POST"])
+def add_followup():
+    text = request.form.get("text")
+    due = request.form.get("due")
 
     followups = load_followups()
     followups.append({
