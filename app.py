@@ -67,7 +67,8 @@ def index():
 def add_followup():
     text = request.form.get("text")
     due = request.form.get("due")
-
+print("TEXT:", text)
+print("DUE:", due)
     followups = load_followups()
     followups.append({
         "text": request.args.get("text"),
