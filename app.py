@@ -7,9 +7,15 @@ app = Flask(__name__)
 DATA_FILE = "followups.json"
 
 def load_followups():
-    if not os.path.exists(DATA_FILE):
+    if not os.path.exists("followups.json"):
         return []
-    with open(DATA_FILE, "r") as f:
+
+    with open("followups.json", "r") as f:
+        try:
+            return json.load(f)
+        except json.JSONDecodeError:
+            return []
+    
         return json.load(f)
 
 def save_followups(data):
@@ -94,3 +100,9 @@ def delete(i):
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
 
+<li>
+  {{ f.text }}
+  {% if f.due %}
+    <small> (Due: {{ f.due }})</small>
+  {% endif %}
+</li>
